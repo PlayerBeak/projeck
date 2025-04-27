@@ -110,7 +110,7 @@ function drawContentBox() {
 
 function getWeather() {
     let apiKey = '1a81ae5c986844dd9f794843252704'; // <-- 여기 너의 WeatherAPI 키 입력!
-    let url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=안성&lang=ko`;
+    let url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Anseong&lang=ko`;
   
     loadJSON(url, gotWeather, 'json');
 }
