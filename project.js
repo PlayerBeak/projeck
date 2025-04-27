@@ -149,6 +149,7 @@ function searchTab() {
             newLayer.g.fill(255)
             newLayer.g.rect(300,220, 350, 80, 20)
             newLayer.g.rect(300,100, 350, 80, 20)
+            newLayer.g.rect(300,50, 350, 120, 20)
             newLayer.g.fill(0)
             newLayer.g.text("오늘의 기분은?",475,240)
             newLayer.g.text("1:매우 나쁨 ~ 5:매우 좋음",475,280)
@@ -158,6 +159,7 @@ function searchTab() {
                 newLayer.g.fill(255)
                 newLayer.g.rect(950,300 + i * 200, 350, 100, 20)
                 newLayer.g.rect(300,220 + i * 200, 350, 80, 20)
+                newLayer.g.rect(300,50, 350, 120, 20)
                 if (i < 2){
                     newLayer.g.rect(300,220 + (i + 1) * 200, 350, 80, 20)
                 }
