@@ -137,6 +137,7 @@ function searchTab() {
             ["사용할 수 있는 금액", "(숫자만입력)"],
             ["인원수 입력", "(숫자만입력)"]
         ]
+        getWeather()
         newLayer.g.textAlign(CENTER, CENTER)
         newLayer.g.fill(255)
         inputBox.show()
