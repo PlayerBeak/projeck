@@ -108,11 +108,17 @@ function drawContentBox() {
     rect(5, 5, width - 10, height - 10)
 }
 
-function getWeather() {
-    let apiKey = '1a81ae5c986844dd9f794843252704'; // <-- 여기 너의 WeatherAPI 키 입력!
+async function getWeather() {
+    let apiKey = '1a81ae5c986844dd9f794843252704'; // WeatherAPI 키
     let url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Anseong&lang=ko`;
-  
-    loadJSON(url, gotWeather, 'json');
+    
+    try {
+        let response = await fetch(url);
+        let data = await response.json();  // JSON으로 응답 처리
+        console.log(data);  // 날씨 데이터 확인
+    } catch (error) {
+        console.error("Error fetching weather data:", error);
+    }
 }
 
 function gotWeather(data) {
