@@ -137,7 +137,6 @@ function searchTab() {
             ["사용할 수 있는 금액", "(숫자만입력)"],
             ["인원수 입력", "(숫자만입력)"]
         ]
-        getWeather()
         newLayer.g.textAlign(CENTER, CENTER)
         newLayer.g.fill(255)
         inputBox.show()
@@ -149,6 +148,7 @@ function searchTab() {
         if (newLayer.input.length == 0){
             newLayer.g.fill(255)
             newLayer.g.rect(300,220, 350, 80, 20)
+            newLayer.g.rect(300,100, 350, 80, 20)
             newLayer.g.fill(0)
             newLayer.g.text("오늘의 기분은?",475,240)
             newLayer.g.text("1:매우 나쁨 ~ 5:매우 좋음",475,280)
