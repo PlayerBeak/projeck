@@ -13,6 +13,7 @@ class Layer{
 function preload(){
     img1 = loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Mama_instant_noodle_block.jpg/600px-Mama_instant_noodle_block.jpg?20140515094805')
     img2 = loadImage('https://upload.wikimedia.org/wikipedia/commons/9/9c/Garak-guksu.jpg')
+    getCurrentWeather()
     
 }
 let arr1 = []
@@ -26,8 +27,6 @@ let tabCount = 1
 let search = false
 let setWidth = 270
 let setTab = 15
-let weatherData;
-let isWeatherLoading = true;
 function setup() {
     createCanvas(1600, 900)
     noStroke()
@@ -40,6 +39,7 @@ function setup() {
 
     img1.resize(300,300)
     img2.resize(300,300)
+    
     img = img1
     rank = "인스턴트 인간"
     N1 = 1
@@ -107,24 +107,55 @@ function drawContentBox() {
     fill(255)
     rect(5, 5, width - 10, height - 10)
 }
-
-async function getWeather() {
-    let apiKey = '1a81ae5c986844dd9f794843252704'; // WeatherAPI 키
-    let url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Anseong&lang=ko`;
-    
-    try {
-        let response = await fetch(url);
-        let data = await response.json();  // JSON으로 응답 처리
-        console.log(data);  // 날씨 데이터 확인
-    } catch (error) {
-        console.error("Error fetching weather data:", error);
+function getUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, error);
+    } else {
+      console.log('Geolocation을 지원하지 않는 브라우저입니다.');
+    }
+  
+    function success(position) {
+      const latitude = position.coords.latitude;   // 위도
+      const longitude = position.coords.longitude; // 경도
+  
+      console.log('현재 위도:', latitude);
+      console.log('현재 경도:', longitude);
+  
+      // 여기서 WeatherAPI에 위도/경도로 날씨 요청 가능
+      getCurrentWeather(latitude, longitude);
+    }
+  
+    function error(err) {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 }
-
-function gotWeather(data) {
-    weatherData = data
-    console.log(weatherData)
-}
+const apiKey = '1a81ae5c986844dd9f794843252704' // WeatherAPI에서 발급받은 API 키
+const city = 'Anseong' // 원하는 도시나 지역
+temp = ""
+condi = ""
+weathericon = ""
+async function getCurrentWeather(lat,lon) {
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}&aqi=no`
+  
+    try {
+      const response = await fetch(url)
+      if (!response.ok) {
+        throw new Error(`HTTP 오류! 상태: ${response.status}`)
+      }
+      const data = await response.json()
+      
+      console.log('현재 온도:', data.current.temp_c + '°C')
+      console.log('날씨 상태:', data.current.condition.text)
+      console.log('아이콘 URL:', 'https:' + data.current.condition.icon)
+      temp = data.current.temp_c + '°C'
+      iconimg = loadImage('https:' + data.current.condition.icon,(img) => {
+        img.resize(60, 60)
+        iconimg = img
+      })
+    } catch (error) {
+      console.error('날씨 정보를 가져오는 중 오류 발생:', error)
+    }
+  }
 
 let userInput = ""
 let keyon = false
@@ -137,6 +168,7 @@ function searchTab() {
             ["사용할 수 있는 금액", "(숫자만입력)"],
             ["인원수 입력", "(숫자만입력)"]
         ]
+        
         newLayer.g.textAlign(CENTER, CENTER)
         newLayer.g.fill(255)
         inputBox.show()
@@ -148,9 +180,10 @@ function searchTab() {
         if (newLayer.input.length == 0){
             newLayer.g.fill(255)
             newLayer.g.rect(300,220, 350, 80, 20)
-            newLayer.g.rect(300,100, 350, 80, 20)
             newLayer.g.rect(300,50, 350, 120, 20)
             newLayer.g.fill(0)
+            newLayer.g.text(temp,475,70)
+            newLayer.g.image(iconimg,445,100)
             newLayer.g.text("오늘의 기분은?",475,240)
             newLayer.g.text("1:매우 나쁨 ~ 5:매우 좋음",475,280)
         }
@@ -289,7 +322,7 @@ function mousePressed() {
     if (page === 0 && mouseX < width/2+400 && mouseX > width/2-400 && mouseY > height/2-100 && mouseY < height/2+100) {
         search = true
         searchTab()
-        getWeather()
+        
         tabCount += 1
         page = tabCount - 1
     }
