@@ -107,6 +107,8 @@ function drawContentBox() {
     fill(255)
     rect(5, 5, width - 10, height - 10)
 }
+let latitude
+let longitude
 function getUserLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(success, error);
@@ -115,14 +117,12 @@ function getUserLocation() {
     }
   
     function success(position) {
-      const latitude = position.coords.latitude;   // 위도
-      const longitude = position.coords.longitude; // 경도
+      latitude = position.coords.latitude;   // 위도
+      longitude = position.coords.longitude; // 경도
   
       console.log('현재 위도:', latitude);
       console.log('현재 경도:', longitude);
   
-      // 여기서 WeatherAPI에 위도/경도로 날씨 요청 가능
-      getCurrentWeather(latitude, longitude);
     }
   
     function error(err) {
