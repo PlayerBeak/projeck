@@ -107,35 +107,13 @@ function drawContentBox() {
     fill(255)
     rect(5, 5, width - 10, height - 10)
 }
-let latitude
-let longitude
-function getUserLocation() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(success, error);
-    } else {
-      console.log('Geolocation을 지원하지 않는 브라우저입니다.');
-    }
-  
-    function success(position) {
-      latitude = position.coords.latitude;   // 위도
-      longitude = position.coords.longitude; // 경도
-  
-      console.log('현재 위도:', latitude);
-      console.log('현재 경도:', longitude);
-  
-    }
-  
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
-}
 const apiKey = '1a81ae5c986844dd9f794843252704' // WeatherAPI에서 발급받은 API 키
 const city = 'Anseong' // 원하는 도시나 지역
 temp = ""
 condi = ""
 weathericon = ""
-async function getCurrentWeather(lat,lon) {
-    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${lat},${lon}&aqi=no`
+async function getCurrentWeather() {
+    const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&aqi=no`
   
     try {
       const response = await fetch(url)
@@ -148,10 +126,9 @@ async function getCurrentWeather(lat,lon) {
       console.log('날씨 상태:', data.current.condition.text)
       console.log('아이콘 URL:', 'https:' + data.current.condition.icon)
       temp = data.current.temp_c + '°C'
-      loadImage('https:' + data.current.condition.icon,(img) => {
-        img.resize(60, 60)
-        iconimg = img
-      })
+      iconimg = loadImage('https:' + data.current.condition.icon)
+      iconimg.resize(60,60)
+      condi = data.current.condition.text
     } catch (error) {
       console.error('날씨 정보를 가져오는 중 오류 발생:', error)
     }
@@ -192,7 +169,6 @@ function searchTab() {
                 newLayer.g.fill(255)
                 newLayer.g.rect(950,300 + i * 200, 350, 100, 20)
                 newLayer.g.rect(300,220 + i * 200, 350, 80, 20)
-                newLayer.g.rect(300,50, 350, 120, 20)
                 if (i < 2){
                     newLayer.g.rect(300,220 + (i + 1) * 200, 350, 80, 20)
                 }
@@ -289,8 +265,8 @@ function result2(){
         newLayer.g.fill(0)
         newLayer.g.textSize(40)
         newLayer.g.textAlign(CENTER, CENTER)
-        newLayer.g.text("축하합니다!! 오늘의 메뉴는 " + con + "입니다.", width/2, height/2+200)
-        newLayer.g.image(img,width/2-150,height/2-200)
+        newLayer.g.text("축하합니다!! 오늘의 메뉴는 " + con + "입니다.", width/2, height/2-50)
+        newLayer.g.image(img,width/2-150,20)
     }
     layers.push(newLayer)
 }
