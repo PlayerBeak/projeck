@@ -148,7 +148,7 @@ async function getCurrentWeather(lat,lon) {
       console.log('날씨 상태:', data.current.condition.text)
       console.log('아이콘 URL:', 'https:' + data.current.condition.icon)
       temp = data.current.temp_c + '°C'
-      iconimg = loadImage('https:' + data.current.condition.icon,(img) => {
+      loadImage('https:' + data.current.condition.icon,(img) => {
         img.resize(60, 60)
         iconimg = img
       })
